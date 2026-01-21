@@ -4,6 +4,9 @@ const monInput = document.getElementById('monInput');
 const monInput2 = document.getElementById('monInput2');
 const monBouton = document.getElementById('monBouton');
 const monBouton2 = document.getElementById('monBouton2');
+const monInputVote = document.getElementById('monInputVote');
+const monBoutonVoter = document.getElementById('monBoutonVote');
+const monSelect = document.getElementById('usersList');
  
 // Ajout d'un écouteur d'événement sur le deuxième bouton
 monBouton2.addEventListener('click', () => {
@@ -23,7 +26,20 @@ monBouton.addEventListener('click', () => {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ inputValue: monInput.value, inputValue2: monInput2.value })     
+        body: JSON.stringify({ inputValue: monInput.value, inputValue2: monInput2.value , monSelect : value  })     
+    }).then(response => response.text())
+      .then(data => {(data);
+      });
+});
+
+monBoutonVoter.addEventListener('click', () => {
+    
+    fetch('/voter', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ inputValueVote: monInputVote.value })     
     }).then(response => response.text())
       .then(data => {(data);
       });
@@ -32,14 +48,30 @@ monBouton.addEventListener('click', () => {
 window.onload = () => {
     fetch('/users')
     .then(response => response.json())
-    .then(users => {
+    .then(User => {
         const usersList = document.getElementById('usersList');
-        users.forEach(user => {
+        User.forEach(user => {
             //création d'un input select option avec id en value et login en texte  
             const option = document.createElement('option');
             option.value = user.id;
             option.text = user.login;
             usersList.appendChild(option);  
+            
+        });
+    });
+}
+
+window.onload = () => {
+    fetch('/userslist')
+    .then(response => response.json())
+    .then(User => {
+        const usersIdList = document.getElementById('listUl');
+        User.forEach(user => {
+            //création d'un input select option avec id en value et login en texte  
+            const option = document.createElement('li');
+            option.value = user.id;
+            option.text = user.login;
+            usersIdList.appendChild(option);  
             
         });
     });
