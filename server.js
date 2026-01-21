@@ -17,6 +17,17 @@ connection.connect((err) => {
   console.log('Connecté à la base de données MySQL.');  
 });
 
+app.get('/users', (req, res) => {
+  connection.query('SELECT * FROM User', (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la récupération des utilisateurs :', err);
+      res.status(500).json({ message: 'Erreur serveur' });
+      return;
+    }
+    res.json(results);
+  });
+});
+
 
 app.use(express.static('public'));
 app.use(express.json());

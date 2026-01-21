@@ -28,3 +28,19 @@ monBouton.addEventListener('click', () => {
       .then(data => {(data);
       });
 });
+
+window.onload = () => {
+    fetch('/users')
+    .then(response => response.json())
+    .then(users => {
+        const usersList = document.getElementById('usersList');
+        users.forEach(user => {
+            //création d'un input select option avec id en value et login en texte  
+            const option = document.createElement('option');
+            option.value = user.id;
+            option.text = user.login;
+            usersList.appendChild(option);  
+            
+        });
+    });
+}
