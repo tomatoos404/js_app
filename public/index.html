@@ -6,20 +6,30 @@
    
 </head>
 <body>
-    <h1>Bienvenue sur la page d'accueil</h1>
-    <input type="text" id="monInput" placeholder="name">
-    <input type="text" id="monInput2" placeholder="passe" >
-    <input type="text" id="monInputVote" placeholder="voter">
-    <input type="button" value="inscrition!" id="monBouton">
-    <input type="button" value="Cliquez moi encore !" id="monBouton2">
-    <input type="button" value="voter" id="monBoutonVote">
+    <div>
+        <h2>Inscription</h2>
+        <input type="text" id="monInput" placeholder="name">
+        <input type="text" id="monInput2" placeholder="passe">
+        <input type="button" value="inscription!" id="monBouton">
+    </div>
 
-    <select name="list" id="usersList"></select>
-    <br>
-    Réponse : <div id="reponse">nada </div>
+
+    <div>
+        <h2>Vote</h2>
+        <select name="list" id="usersList"></select>
+        <input type="text" id="monInputVote" placeholder="voter">
+        <input type="button" value="voter" id="monBoutonVote">
+    </div>
+
+
+    <div>
+        <h2>Test</h2>
+        <input type="button" value="Cliquez moi encore !" id="monBouton2">
+        Réponse : <div id="reponse">nada</div>
+    </div>
 
     <div id="afficherId">
-        <h2>afficher id user</h2>
+        <h2>Liste des utilisateurs</h2>
         <ul id="listUl">
 
         </ul>
