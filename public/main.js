@@ -73,7 +73,7 @@ window.onload = () => {
         const usersIdList = document.getElementById('listUl');
         votes.forEach(vote => {
             const li = document.createElement('li');
-            li.textContent = vote.vote + ' -----  ' + vote.login + ''   ;
+            li.innerHTML = vote.login + ' -----  ' + vote.vote + '------' + vote.vote_count  ;
             usersIdList.appendChild(li);
             console.log(vote);  
         });
@@ -86,7 +86,7 @@ window.onload = () => {
         const usersIdList = document.getElementById('listUl');
         users.forEach(user => {
             const li = document.createElement('li');
-            li.textContent = user.login + ' ----- (ID = ' + user.id + ')';
+            li.innerHTML = user.login + ' ----- (ID = ' + user.id + ')';
             usersIdList.appendChild(li);  
         });
     });

@@ -80,7 +80,7 @@ app.post('/voter', (req, res) => {
 
 app.get('/votes-count', (req, res) => {
   connection.query(
-    'SELECT * , COUNT(id_user) as vote FROM User JOIN Voter ON User.id = Voter.id_user GROUP BY User.login  ;',
+    'SELECT * , COUNT(id_user) as vote_count FROM User JOIN Voter ON User.id = Voter.id_user GROUP BY User.login   ;',
     (err, results) => {
       if (err) {
         console.error('Erreur lors du comptage des votes :', err);
