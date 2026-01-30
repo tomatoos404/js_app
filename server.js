@@ -33,6 +33,9 @@ app.get('/users', (req, res) => {
 });
 
 
+
+
+
 app.get('/info', (req, res) => {
   res.json({ cle1: 'Toto', cle2: 'titi' });
 });
@@ -95,4 +98,24 @@ app.get('/votes-count', (req, res) => {
 app.listen(3000, () => {
   let monIp = require("ip").address();
   console.log(`Server running on http://${monIp}:3000`);
+});
+
+
+app.post('/connexion', (req, res) => {  
+  console.log(req.body);
+  //on récupère le login et le password
+  const { login, password } = req.body;
+  connection.query('SELECT * FROM User WHERE login = ? AND password = ?', [login, password], (err, results) => {
+    if (err) {
+      console.error('Erreur lors de la vérification des identifiants :', err);
+      res.status(500).json({ message: 'Erreur serveur' });
+      return;
+    }
+    if (results.length === 0) {
+      res.status(401).json({ message: 'Identifiants invalides' });
+      return;
+    }
+    // Identifiants valides 
+    res.json({ message: 'Connexion réussie !' });
+});
 });
