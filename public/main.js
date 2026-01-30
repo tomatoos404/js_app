@@ -5,6 +5,7 @@ const monBouton2 = document.getElementById('monBouton2');
 const monInputVote = document.getElementById('monInputVote');
 const monBoutonVoter = document.getElementById('monBoutonVote');
 const monSelect = document.getElementById('usersList');
+
  
 // Ajout d'un écouteur d'événement sur le deuxième bouton
 monBouton2.addEventListener('click', () => {
@@ -34,6 +35,8 @@ monBouton.addEventListener('click', () => {
           console.log(data);
       });
 });
+
+
 
 // Bouton pour voter
 monBoutonVoter.addEventListener('click', () => {
@@ -92,6 +95,27 @@ window.onload = () => {
     });
     
 
-    
+
+
 }
+
+const loginButton = document.getElementById('loginButton');
+loginButton.addEventListener('click', () => {
+    const loginInput = document.getElementById('loginInput').value;
+    const passwordInput = document.getElementById('passwordInput').value;
+
+    fetch('/connexion', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ login: loginInput, password: passwordInput })
+    }).then(response => response.json())
+        .then(data => {
+            alert(data.message);
+            alert('ID utilisateur : ' + data.User.id);
+            localStorage.setItem('userId', data.User.id);
+           
+        });
+});
 

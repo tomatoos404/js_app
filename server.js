@@ -116,6 +116,6 @@ app.post('/connexion', (req, res) => {
       return;
     }
     // Identifiants valides 
-    res.json({ message: 'Connexion réussie !' });
+    res.json({ message: 'Connexion réussie !',User: results[0]});
 });
 });
