@@ -27,7 +27,7 @@ function chargerUtilisateurs() {
                 option.text = user.login;
                 usersListSelect.appendChild(option);
                 const li = document.createElement('li');
-                li.innerHTML = `Login: <b>${user.login}</b> (ID: ${user.id})`;
+                li.innerHTML = `Login: <p>${user.login}</p> (ID: ${user.id})`;
                 listUl.appendChild(li);
             });
         });
