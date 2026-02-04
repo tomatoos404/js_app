@@ -9,7 +9,6 @@ const usersListSelect = document.getElementById('usersList');
 window.onload = () => {
     chargerUtilisateurs();
     chargerVotes();
-    verifierConnexionExistante();
 };
 
 function chargerUtilisateurs() {
@@ -45,14 +44,6 @@ function chargerVotes() {
                 listUl.appendChild(li);
             });
         });
-}
-
-function verifierConnexionExistante() {
-    const storedId = localStorage.getItem('userId');
-    if (storedId) {
-        console.log("Utilisateur déjà connecté avec ID : " + storedId);
-
-    }
 }
 
 -
