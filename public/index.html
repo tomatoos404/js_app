@@ -3,38 +3,39 @@
 <head>
     <meta charset='utf-8'>
     <link rel='stylesheet' type='text/css' href='main.css'>
-   
+    <title>voter</title>
 </head>
 <body>
     <div>
         <h2>Inscription</h2>
-        <input type="text" id="monInput" placeholder="name">
-        <input type="text" id="monInput2" placeholder="passe">
-        <input type="button" value="inscription!" id="monBouton">
+        <input type="text" id="monInput" placeholder="Nom d'utilisateur">
+        <input type="text" id="monInput2" placeholder="Mot de passe">
+        <input type="button" value="Inscription !" id="monBouton">
     </div>
 
 
     <div>
         <h2>Connexion</h2>
-        <input type="text" id="loginInput" placeholder="login">
-        <input type="text" id="passwordInput" placeholder="passeword">
-        <input type="button" value="connexion!" id="loginButton">
-
+        <input type="text" id="loginInput" placeholder="Login">
+        <input type="text" id="passwordInput" placeholder="Password">
+        <input type="button" value="Connexion !" id="loginButton">
     </div>
 
 
     <div>
         <h2>Vote</h2>
-        <select name="list" id="usersList"></select>
-        <select name="list_de_vote" id="monInputVote" placeholder="voter">
-            <option value="bardella">bardella</option>
-            <option value="marine_lepen">marine lepen</option>
-            <option value="macron">macron</option>
-            <option value="melanchon">melanchon</option>
+        <!-- <label>Utilisateurs inscrits : </label>
+        <select name="list" id="usersList"></select> -->
+        
+        <label>Je vote pour : </label>
+        <select name="list_de_vote" id="monInputVote">
+            <option value="bardella">Bardella</option>
+            <option value="marine_lepen">Marine Le Pen</option>
+            <option value="macron">Macron</option>
+            <option value="melenchon">Melenchon</option> 
         </select>
         <input type="button" value="voter" id="monBoutonVote">
     </div>
-
 
     <div>
         <h2>Test</h2>
@@ -43,11 +44,11 @@
     </div>
 
     <div id="afficherId">
-        <h2>Liste des utilisateurs</h2>
+        <h2>Liste des utilisateurs et votes</h2>
         <ul id="listUl">
-
-        </ul>
+            </ul>
     </div>
+
+    <script src='main.js'></script>
 </body>
-<script src='main.js'></script>
 </html>

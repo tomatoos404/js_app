@@ -1,138 +1,123 @@
 const express = require('express');
 const app = express();
 const mysql = require('mysql2');
- 
+const ip = require("ip"); 
+
 const connection = mysql.createConnection({
-  host: '172.29.18.111',
-  user: 'jsServer',
-  password: 'jsServer',
-  database: 'testjs'
+    host: '172.29.18.111',
+    user: 'jsServer',
+    password: 'jsServer',
+    database: 'testjs'
 });
 
 connection.connect((err) => {
-  if (err) {
-    console.error('Erreur de connexion à la base de données :', err);
-    return;
-  }
-  console.log('Connecté à la base de données MySQL.');  
+    if (err) {
+        console.error('Erreur de connexion à la BDD :', err);
+        return;
+    }
+    console.log('Connecté à la base de données MySQL.');
 });
 
-app.use(express.static('public'));
+app.use(express.static('public')); 
 app.use(express.json());
 
-// Route pour récupérer tous les utilisateurs
+
 app.get('/users', (req, res) => {
-  connection.query('SELECT * FROM User', (err, results) => {
-    if (err) {
-      console.error('Erreur lors de la récupération des utilisateurs :', err);
-      res.status(500).json({ message: 'Erreur serveur' });
-      return;
-    }
-    res.json(results);
-  });
+    connection.query('SELECT * FROM User', (err, results) => {
+        if (err) {
+            res.status(500).json({ message: 'Erreur serveur' });
+            return;
+        }
+        res.json(results);
+    });
 });
-
-
-
-
 
 app.get('/info', (req, res) => {
-  res.json({ cle1: 'Toto', cle2: 'titi' });
+    res.json({ cle1: 'Toto', cle2: 'titi' });
 });
 
-// Route d'inscription
 app.post('/register', (req, res) => {
-  console.log('Données reçues pour l\'inscription');
-  console.log(req.body);
-  
-  connection.query(
-    'INSERT INTO User (login, password) VALUES (?, ?)',
-    [req.body.inputValue, req.body.inputValue2],
-    (err, results) => {
-      if (err) {
-        console.error('Erreur lors de l\'insertion dans la base de données :', err);
-        res.status(500).json({ message: 'Erreur serveur' });
-        return;
-      }
-      console.log('Insertion réussie, ID utilisateur :', results.insertId);
-      res.json({ message: 'Inscription réussie !', userId: results.insertId });
-    }
-  );
+    const { inputValue, inputValue2 } = req.body;
+    connection.query(
+        'INSERT INTO User (login, password) VALUES (?, ?)',
+        [inputValue, inputValue2],
+        (err, results) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({ message: 'Erreur serveur' });
+                return;
+            }
+            res.json({ message: 'Inscription réussie !', userId: results.insertId });
+        }
+    );
 });
 
-// Route pour voter
 app.post('/voter', (req, res) => {
-  console.log('Données reçues pour le vote');
-  console.log(req.body);
-  
-  connection.query(
-    'INSERT INTO Voter (id_user, vote) VALUES (?, ?)',
-    [req.body.userId, req.body.voteValue],
-    (err, results) => {
-      if (err) {
-        console.error('Erreur lors de l\'insertion dans la base de données :', err);
-        res.status(500).json({ message: 'Erreur serveur' });
-        return;
-      }
-      console.log('Insertion réussie, ID vote :', results.insertId);
-      res.json({ message: 'Vote enregistré !', voteId: results.insertId });
-    }
-  );
+    const { userId, voteValue } = req.body;
+    
+    connection.query(
+        'INSERT INTO Voter (id_user, vote) VALUES (?, ?)',
+        [userId, voteValue],
+        (err, results) => {
+            if (err) {
+                console.error(err);
+                res.status(500).json({ message: 'Erreur serveur ou vote déjà existant' });
+                return;
+            }
+            res.json({ message: 'Vote enregistré !', voteId: results.insertId });
+        }
+    );
 });
-
 
 app.get('/votes-count', (req, res) => {
-  connection.query(
-    'SELECT * , COUNT(id_user) as vote_count FROM User JOIN Voter ON User.id = Voter.id_user GROUP BY User.login   ;',
-    (err, results) => {
-      if (err) {
-        console.error('Erreur lors du comptage des votes :', err);
-        res.status(500).json({ message: 'Erreur serveur' });
-        return;
-      }
-      res.json(results);
-    }
-  );
+    const sql = `
+        SELECT User.login, Voter.vote 
+        FROM User 
+        JOIN Voter ON User.id = Voter.id_user 
+        ORDER BY User.login
+    `;
+    
+    connection.query(sql, (err, results) => {
+        if (err) {
+            console.error(err);
+            res.status(500).json({ message: 'Erreur serveur' });
+            return;
+        }
+        res.json(results);
+    });
 });
 
-app.get('/connexionId', (req, res) => {
-  console.log('Données reçues');
-  console.log(req.body);
-  const {userId} = req.body;
-  connection.query(
-    'SELECT id from User WHERE id = ?',
-    [userId],
-    (err) => {
-      if (err) {
-        console.error('Erreur DE RECUPERATION', err);
-        res.status(500).json({ message: 'Erreur serveur' });
-        return;
-      }
-    }
-  );
+app.post('/connexion', (req, res) => {
+    const { login, password } = req.body;
+    connection.query('SELECT * FROM User WHERE login = ? AND password = ?', [login, password], (err, results) => {
+        if (err) {
+            res.status(500).json({ message: 'Erreur serveur' });
+            return;
+        }
+        if (results.length === 0) {
+            res.status(401).json({ message: 'Identifiants invalides' });
+            return;
+        }
+        res.json({ message: 'Connexion réussie !', User: results[0] });
+    });
+});
+
+app.post('/connexionId', (req, res) => {
+    const { userId } = req.body;
+    connection.query('SELECT id, login FROM User WHERE id = ?', [userId], (err, results) => {
+        if (err) {
+            res.status(500).json({ message: 'Erreur serveur' });
+            return;
+        }
+        if (results.length > 0) {
+            res.json(results[0]);
+        } else {
+            res.status(404).json({ message: 'Utilisateur introuvable' });
+        }
+    });
 });
 
 app.listen(3000, () => {
-  let monIp = require("ip").address();
-  console.log(`Server running on http://${monIp}:3000`);
-});
-
-
-app.post('/connexion', (req, res) => {  
-  console.log(req.body);
-  //on récupère le login et le password
-  const { login, password } = req.body;
-  connection.query('SELECT * FROM User WHERE login = ? AND password = ?', [login, password], (err, results) => {
-    if (err) {
-      console.error('Erreur lors de la vérification des identifiants :', err);
-      res.status(500).json({ message: 'Erreur serveur' });
-      return;
-    }
-    if (results.length === 0) {
-      res.status(401).json({ message: 'Identifiants invalides' });
-      return;
-    }
-    // Identifiants valides 
-    res.json({ message: 'Connexion réussie !',User: results[0]});
-});
+    let monIp = ip.address();
+    console.log(`Server running on http://${monIp}:3000`);
 });
