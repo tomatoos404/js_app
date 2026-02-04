@@ -5,6 +5,18 @@ const monBouton2 = document.getElementById('monBouton2');
 const monInputVote = document.getElementById('monInputVote');
 const monBoutonVoter = document.getElementById('monBoutonVote');
 const monSelect = document.getElementById('usersList');
+fetch('/connexionId', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ 
+        userId: localStorage.getItem('userId'),
+    })
+  });
+function fetchConnexionId() {
+    
+}
 
  
 // Ajout d'un écouteur d'événement sur le deuxième bouton
@@ -64,8 +76,8 @@ window.onload = () => {
         const usersList = document.getElementById('usersList');
         users.forEach(user => {
             const option = document.createElement('option');
-            option.value = user.id;
-            option.text = user.login;
+            option.value =localStorage.getItem('userId', user.id);
+            option.text = fetchConnexionId() ;
             usersList.appendChild(option);  
         });
     });
@@ -115,6 +127,7 @@ loginButton.addEventListener('click', () => {
             alert(data.message);
             alert('ID utilisateur : ' + data.User.id);
             localStorage.setItem('userId', data.User.id);
+            localStorage.setItem('userlogin', data.User.login);
            
         });
 });

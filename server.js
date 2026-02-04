@@ -95,6 +95,23 @@ app.get('/votes-count', (req, res) => {
   );
 });
 
+app.get('/connexionId', (req, res) => {
+  console.log('Données reçues');
+  console.log(req.body);
+  const {userId} = req.body;
+  connection.query(
+    'SELECT id from User WHERE id = ?',
+    [userId],
+    (err) => {
+      if (err) {
+        console.error('Erreur DE RECUPERATION', err);
+        res.status(500).json({ message: 'Erreur serveur' });
+        return;
+      }
+    }
+  );
+});
+
 app.listen(3000, () => {
   let monIp = require("ip").address();
   console.log(`Server running on http://${monIp}:3000`);
